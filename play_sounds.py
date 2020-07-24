@@ -1,34 +1,34 @@
 import winsound as ws
 import tkinter as tk
-import logging, time, os
-import threading
+import os, threading
 
-file_path = os.path.abspath(__file__)
+'''
+PLAY_SOUNDS
+-Nicholas Olgado
+
+this script is a simple GUI that takes user input to play a tone.
+
+the first entry is the tone frequency, as a sine wave.
+the second entry is the tone duration, in seconds. This number can be a decimal.
+'''
+
+#TO DO: gui doesn't scale
+
 project_dir = os.path.dirname(__file__)
-logging_file_path = os.path.join(project_dir, 'LOG.txt')
-
-FREQ = 0
-DUR = 0
-
-def play_sound(freq, dur):
-    logging.info("Play Sound Thread Starting...")
-    ws.Beep(freq, dur)
-    logging.info("Play Sound Thread Finishing...")
 
 def ws_thread():
-    logging.info("Formatting inputs...")
     FREQ = int(e_tone.get())
-    DUR = int(float(e_dur.get()) * 1000)
-    logging.info("Button    : before creating thread")
-    x = threading.Thread(target=play_sound, args=(FREQ,DUR))
-    logging.info("Button    : before running thread")
-    x.start()
-    logging.info("Button    : wait for the thread to finish")
-    # x.join()
-    logging.info("Button    : all done")
 
-format = "%(asctime)s: %(message)s"
-logging.basicConfig(filename = logging_file_path, format=format, level=logging.INFO, datefmt="%H:%M:%S")
+    if FREQ < 37:
+        print('value not in range')
+        FREQ = 37
+    if FREQ > 32767:
+        print('value not in range')
+        FREQ = 32767
+
+    DUR = int(float(e_dur.get()) * 1000)
+    x = threading.Thread(target=ws.Beep, args=(FREQ,DUR))
+    x.start()
 
 window = tk.Tk()
 window.title("Tone Generator")
